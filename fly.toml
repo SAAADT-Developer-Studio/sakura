@@ -1,4 +1,4 @@
-app = "sakura-staging"
+app = "sakura"
 
 kill_signal = "SIGINT"
 kill_timeout = 5
