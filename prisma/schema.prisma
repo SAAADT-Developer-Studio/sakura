@@ -16,6 +16,17 @@ model User {
 
   password Password?
   notes    Note[]
+  CarMatch CarMatch[]
+  Car      Car[]
+}
+
+model Participant {
+  id                   String                 @id @default(cuid())
+  name                 String
+  CarMatch             CarMatch?              @relation(fields: [carMatchId], references: [id])
+  carMatchId           String?
+  CarMatch_Participant CarMatch_Participant[]
+  Car                  Car[]
 }
 
 model Password {
@@ -23,6 +34,36 @@ model Password {
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @unique
+}
+
+model CarMatch {
+  id                   String                 @id @default(cuid())
+  participants         Participant[]
+  organiser            User                   @relation(fields: [userId], references: [id])
+  car                  Car                    @relation(fields: [carId], references: [id])
+  userId               String
+  carId                String
+  CarMatch_Participant CarMatch_Participant[]
+}
+
+model CarMatch_Participant {
+  id            String      @id @default(cuid())
+  carMatchId    String
+  carMatch      CarMatch    @relation(fields: [carMatchId], references: [id])
+  participantId String
+  participant   Participant @relation(fields: [participantId], references: [id])
+}
+
+model Car {
+  id            String      @id @default(cuid())
+  brand         String
+  model         String
+  seats         Int
+  owner         Participant @relation(fields: [participantId], references: [id])
+  creator       User        @relation(fields: [userId], references: [id])
+  CarMatch      CarMatch[]
+  participantId String
+  userId        String
 }
 
 model Note {
