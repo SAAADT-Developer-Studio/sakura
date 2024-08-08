@@ -1,3 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Jockey+One&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.jockey-one-regular {
+  font-family: "Jockey One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+* {
+  font-family: "Jockey One";
+}
