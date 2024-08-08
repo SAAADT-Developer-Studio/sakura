@@ -1,5 +1,6 @@
 import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
+import Profile from "~/components/profile";
 
 // import { prisma } from "~/db.server";
 
@@ -23,18 +24,20 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function NewCarPool() {
   return (
-    <Form method="POST">
-      <div className="flex flex-col w-96 border border-black/10 mt-10 p-4 gap-2">
-        <input
-          type="text"
-          placeholder="Name your carpool"
-          name="carpoolName"
-          className="border border-black/30 rounded-md p-2"
-        />
-        <button className="bg-blue-600 p-2 text-white rounded-md">
-          Create Carpool Link
-        </button>
-      </div>
-    </Form>
+    <div>
+      <Form method="POST">
+        <div className="flex flex-col w-96 border border-black/10 mt-10 p-4 gap-2">
+          <input
+            type="text"
+            placeholder="Name your carpool"
+            name="carpoolName"
+            className="border border-black/30 rounded-md p-2"
+          />
+          <button className="bg-blue-600 p-2 text-white rounded-md">
+            Create Carpool Link
+          </button>
+        </div>
+      </Form>
+    </div>
   );
 }
