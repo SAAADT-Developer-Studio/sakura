@@ -55,13 +55,12 @@ model CarParticipant {
 }
 
 model CarPool {
-  id            String        @id @default(cuid())
-  name          String?
-  participantId String
-  Participant   Participant[]
-  organiserId   String
-  organiser     User          @relation(fields: [organiserId], references: [id])
-  Car           Car[]
+  id          String        @id @default(cuid())
+  name        String?
+  Participant Participant[]
+  organiserId String
+  organiser   User          @relation(fields: [organiserId], references: [id])
+  Car         Car[]
 }
 
 // model CarMatch {
