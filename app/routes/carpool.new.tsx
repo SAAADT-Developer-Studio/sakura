@@ -1,6 +1,5 @@
 import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
-import Profile from "~/components/profile";
 
 import { prisma } from "~/db.server";
 import { requireUserId } from "~/session.server";
@@ -9,6 +8,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const userId = await requireUserId(request);
   const formData = await request.formData();
   const name = formData.get("carpoolName")?.toString();
+
   if (!name) {
     return json({ message: "Name is required" });
   }
@@ -21,7 +21,7 @@ export async function action({ request }: ActionFunctionArgs) {
       organiserId: userId,
     },
   });
-  return redirect(`/carpool/${id}`);
+  return redirect(`/carpool/${id}/invite`);
 }
 
 export default function NewCarPool() {
@@ -40,6 +40,5 @@ export default function NewCarPool() {
         </button>
       </div>
     </Form>
-
   );
 }
