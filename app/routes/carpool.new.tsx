@@ -1,5 +1,6 @@
 import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
+import Profile from "~/components/profile";
 
 import { prisma } from "~/db.server";
 import { requireUserId } from "~/session.server";
@@ -39,5 +40,6 @@ export default function NewCarPool() {
         </button>
       </div>
     </Form>
+
   );
 }
