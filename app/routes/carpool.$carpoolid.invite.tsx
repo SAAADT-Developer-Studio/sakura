@@ -27,7 +27,7 @@ export default function Carpool() {
   // TODO: figure out how to get fly app hostname on server
   React.useEffect(() => {
     if (!carPool) return;
-    setLink(`${getHostname()}/carpool/join/${carPool.id}`);
+    setLink(`${getHostname()}/carpool/${carPool.id}/join`);
   }, [carPool]);
 
   if (!carPool) {
