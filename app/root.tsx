@@ -19,7 +19,12 @@ export const links: LinksFunction = () => [
 ];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return json({ user: await getUser(request) });
+  return json({
+    user: await getUser(request),
+    env: {
+      NODE_ENV: process.env.NODE_ENV,
+    },
+  });
 };
 
 export default function App() {
