@@ -30,7 +30,8 @@ export default function Profile({
               type="submit"
               className="w-full flex justify-between place-items-center text-lg"
             >
-              <p>logout</p> <img className="w-4 h-4" src={logout}></img>
+              <p>logout</p>{" "}
+              <img className="w-4 h-4" alt="logout" src={logout}></img>
             </button>
           </Form>
         </div>

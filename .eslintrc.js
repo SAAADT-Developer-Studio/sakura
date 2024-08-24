@@ -32,7 +32,6 @@ module.exports = {
         "plugin:react/recommended",
         "plugin:react/jsx-runtime",
         "plugin:react-hooks/recommended",
-        "plugin:jsx-a11y/recommended",
         "prettier",
       ],
       settings: {
@@ -77,14 +76,7 @@ module.exports = {
         "prettier",
       ],
       rules: {
-        "import/order": [
-          "error",
-          {
-            alphabetize: { caseInsensitive: true, order: "asc" },
-            groups: ["builtin", "external", "internal", "parent", "sibling"],
-            "newlines-between": "always",
-          },
-        ],
+        "@typescript-eslint/no-unused-vars": ["warn"],
       },
     },
 
