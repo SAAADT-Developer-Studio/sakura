@@ -60,7 +60,7 @@ model CarPool {
   Participant Participant[]
   organiserId String
   organiser   User          @relation(fields: [organiserId], references: [id])
-  Car         Car[]
+  Cars         Car[]
 }
 
 // model CarMatch {

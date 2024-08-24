@@ -11,6 +11,7 @@ export default {
         baseGreen: "#D0E1D4",
         brightOrange: "#E4BE9E",
         slightGray: "#707070",
+        customPurple: "#71697A",
       },
     },
   },
