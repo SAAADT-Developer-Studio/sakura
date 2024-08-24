@@ -12,6 +12,7 @@ import {
 
 import { getUser } from "~/session.server";
 import stylesheet from "~/tailwind.css";
+import { Toaster } from "sonner";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -33,10 +34,16 @@ export default function App() {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Sakura</title>
         <Meta />
         <Links />
       </head>
       <body className="h-full">
+        <Toaster
+          toastOptions={{ className: "w-[300px]" }}
+          position="top-right"
+          className="w-[300px]"
+        />
         <Outlet />
         <ScrollRestoration />
         <Scripts />

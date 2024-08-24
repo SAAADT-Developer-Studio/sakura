@@ -15,24 +15,21 @@ interface Car {
 export async function action({ request }: ActionFunctionArgs) {
   const userId = await requireUserId(request);
   const formData = await request.formData();
+  const name = formData.get("carpoolName")?.toString();
 
-  if (formData.get("formType") === "form1") {
-    const name = formData.get("carpoolName")?.toString();
-
-    if (!name) {
-      return json({ message: "Name is required" });
-    }
-    const { id } = await prisma.carPool.create({
-      select: {
-        id: true,
-      },
-      data: {
-        name,
-        organiserId: userId,
-      },
-    });
-    return redirect(`/carpool/${id}/invite`);
+  if (!name) {
+    return json({ message: "Name is required" });
   }
+  const { id } = await prisma.carPool.create({
+    select: {
+      id: true,
+    },
+    data: {
+      name,
+      organiserId: userId,
+    },
+  });
+  return redirect(`/carpool/${id}/invite`);
 }
 
 export default function NewCarPool() {
