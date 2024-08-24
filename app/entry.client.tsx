@@ -9,7 +9,6 @@ import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 
 window.env = __remixContext.state.loaderData?.root.env;
-console.log({ env });
 
 startTransition(() => {
   hydrateRoot(

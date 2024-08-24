@@ -3,6 +3,11 @@ import { useContext } from "react";
 
 import { wsContext } from "~/ws/context";
 
+interface Car {
+  seats: number;
+  name: string;
+}
+
 export async function loader({ params }: LoaderFunctionArgs) {
   const carpoolId = params.carpoolid;
   const participantId = params.participantid;
@@ -16,15 +21,15 @@ export default function CarPool() {
   const socket = useContext(wsContext);
   // TODO: implement a store for the carpool state
 
-  const cars = [];
+  const cars: Car[] = [];
   return (
     <div>
-      <button onClick={() => socket.emit("something", "ping")}>
+      <button onClick={() => socket?.emit("something", "ping")}>
         Send ping
       </button>
-      {cars.map((car) => {
+      {cars.map((car, i) => {
         return (
-          <div>
+          <div key={car.name + i}>
             <div>seat1</div>
             <div>seat2</div>
             <div>seat3</div>
