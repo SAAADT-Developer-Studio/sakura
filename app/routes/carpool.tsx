@@ -25,7 +25,7 @@ export default function CarpoolRoot() {
     });
   }, [socket]);
   return (
-    <main className="flex justify-center pt-10 h-full">
+    <main className="flex justify-center h-full">
       <wsContext.Provider value={socket}>
         <Outlet />
       </wsContext.Provider>
