@@ -1,4 +1,7 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
+import { useContext } from "react";
+
+import { wsContext } from "~/ws/context";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const carpoolId = params.carpoolid;
@@ -6,13 +9,19 @@ export async function loader({ params }: LoaderFunctionArgs) {
   if (!carpoolId || !participantId) {
     throw new Response("bad", { status: 400 });
   }
+  return null;
 }
 
 export default function CarPool() {
-  // TODO: subscribe to websockets endpoint, listen to changes and emit car seat picks
+  const socket = useContext(wsContext);
+  // TODO: implement a store for the carpool state
+
   const cars = [];
   return (
     <div>
+      <button onClick={() => socket.emit("something", "ping")}>
+        Send ping
+      </button>
       {cars.map((car) => {
         return (
           <div>
