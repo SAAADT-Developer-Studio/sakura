@@ -29,6 +29,7 @@ export function registerSocketsServer(httpServer: HttpServer) {
     socket.emit("connected", "connected!");
 
     registerSelectSeatHandler(socket, io);
+    registerDeseelectSeatHandler(socket, io);
   });
 }
 
@@ -57,15 +58,34 @@ function registerSelectSeatHandler(socket: CustomSocket, io: CustomSocketServer)
       });
       console.log("created");
       callback({ status: "success" });
-      io.to(carpoolId).emit("seatSelected", { participant: {}, seat });
+      io.to(carpoolId).emit("seatChange", { participant: {}, seat });
     } catch (err) {
       let message = "Something went wrong";
       if (err instanceof PrismaClientKnownRequestError) {
-        console.log("prisma error", err);
         if (err.code === "P2002") {
           message = "Seat is taken";
         }
       }
+      callback({ status: "error", message });
+    }
+  });
+}
+
+function registerDeseelectSeatHandler(socket: CustomSocket, io: CustomSocketServer) {
+  socket.on("deselectSeat", async (data, callback) => {
+    console.log("deselectSeat", data);
+    const { carId, seat } = data;
+    const carpoolId = socket.data.carpoolId;
+
+    try {
+      await prisma.carParticipant.delete({
+        where: { carId_seat: { carId, seat } },
+      });
+      console.log("created");
+      callback({ status: "success" });
+      io.to(carpoolId).emit("seatChange", { participant: {}, seat });
+    } catch (err) {
+      const message = "Something went wrong";
       callback({ status: "error", message });
     }
   });

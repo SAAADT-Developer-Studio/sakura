@@ -20,15 +20,21 @@ export async function loader({ params }: LoaderFunctionArgs) {
       Cars: { include: { CarParticipant: { include: { participant: true } } } },
     },
   });
+  const participant = await prisma.participant.findUnique({
+    where: { id: participantId },
+    include: { CarParticipant: true },
+  });
 
-  if (!carPool) {
-    throw new Response("not carpool");
+  if (!carPool || !participant) {
+    throw new Response("no carpool or participant");
   }
-  return json({ carPool, participantId });
+  return json({ carPool, participant });
 }
 
 export default function CarPool() {
-  const { carPool, participantId } = useLoaderData<typeof loader>();
+  const { carPool, participant } = useLoaderData<typeof loader>();
+  const participantId = participant.id;
+  const currentSeat = participant.CarParticipant[0];
   const socket = useSocket();
   console.log(carPool);
   // TODO: implement a store for the carpool state
@@ -39,6 +45,7 @@ export default function CarPool() {
       <div>
         <h1 className="text-2xl">Carpool: {carPool.name}</h1>
         <h3>Organiser: {carPool.organiser.email} </h3>
+        <h3>You: {participant.name} </h3>
       </div>
       <div className="mt-5 flex flex-wrap gap-2">
         {carPool.Cars.map((car, i) => {
@@ -48,6 +55,7 @@ export default function CarPool() {
               participants={car.CarParticipant}
               participantId={participantId}
               key={car.name + i}
+              currentSeat={currentSeat}
             />
           );
         })}
@@ -62,42 +70,59 @@ function Car({
   name,
   participants,
   participantId,
+  currentSeat,
 }: {
   id: string;
   seats: number;
   name: string;
-  participants: { seat: number; participant: { name: string } }[];
+  participants: { seat: number; participant: { name: string; id: string } }[];
   participantId: string;
+  currentSeat?: { seat: number; carId: string };
 }) {
   const socket = useSocket();
   const revalidator = useRevalidator();
+  const selectedSeatNumber = currentSeat && currentSeat.carId === id ? currentSeat.seat : null;
 
   useEffect(() => {
     if (!socket) return;
-    const onSeatSelected = ({ seat }: { seat: number }) => {
-      console.log("seatSelected", seat);
+    const onSeatChanged = ({ seat }: { seat: number }) => {
+      console.log("seatChange", seat);
       revalidator.revalidate();
     };
-    socket.on("seatSelected", onSeatSelected);
+    socket.on("seatChange", onSeatChanged);
 
     return () => {
-      socket.off("seatSelected", onSeatSelected);
+      socket.off("seatChange", onSeatChanged);
     };
   }, [socket, revalidator]);
 
   const handleSeatClick = (seatNumber: number, isTaken: boolean) => {
-    console.log("seat click", seatNumber, socket);
+    console.log("seat click", seatNumber, selectedSeatNumber);
     if (isTaken) {
+      if (seatNumber === selectedSeatNumber) {
+        socket?.emit("deselectSeat", { carId: id, seat: seatNumber, participantId }, (response) => {
+          console.log("deselectSeatResponse", { response });
+          if (response.status === "success") {
+            toast.success(`Reservation on seat ${seatNumber} in ${name} was removed.`);
+          } else {
+            toast.error(response.message);
+          }
+          revalidator.revalidate();
+        });
+      }
       return;
     }
+
+    if (currentSeat) return;
+
     socket?.emit("selectSeat", { carId: id, seat: seatNumber, participantId }, (response) => {
-      console.log({ response });
+      console.log("selectSeatResponse", { response });
       if (response.status === "success") {
         toast.success(`Seat ${seatNumber} in ${name} was selected.`);
-        revalidator.revalidate();
       } else {
         toast.error(response.message);
       }
+      revalidator.revalidate();
     });
   };
 

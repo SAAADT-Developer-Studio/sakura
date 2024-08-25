@@ -10,11 +10,19 @@ export interface ClientToServerEvents {
     },
     callback: (res: { status: "success" } | { status: "error"; message: string }) => void,
   ) => void;
+  deselectSeat: (
+    data: {
+      carId: string;
+      seat: number;
+      participantId: string;
+    },
+    callback: (res: { status: "success" } | { status: "error"; message: string }) => void,
+  ) => void;
   something: (msg: string) => void;
 }
 export interface ServerToClientEvents {
   connected: (message: string) => void;
-  seatSelected: (data: { seat: number; participant: unknown }) => void;
+  seatChange: (data: { seat: number; participant: unknown }) => void;
 }
 
 export type CustomSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
