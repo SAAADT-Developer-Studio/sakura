@@ -41,7 +41,6 @@ export default function App() {
       <body className="h-full">
         <Toaster
           toastOptions={{ className: "w-[300px]" }}
-          position="top-right"
           className="w-[300px]"
         />
         <Outlet />

@@ -46,12 +46,13 @@ model Car {
 }
 
 model CarParticipant {
-  id            String      @id @default(cuid())
   seat          Int
   carId         String
   car           Car         @relation(fields: [carId], references: [id])
   participantId String
   participant   Participant @relation(fields: [participantId], references: [id])
+
+  @@id([carId, seat])
 }
 
 model CarPool {
@@ -60,7 +61,7 @@ model CarPool {
   Participant Participant[]
   organiserId String
   organiser   User          @relation(fields: [organiserId], references: [id])
-  Cars         Car[]
+  Cars        Car[]
 }
 
 // model CarMatch {
