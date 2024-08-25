@@ -1,15 +1,5 @@
-import {
-  ActionFunctionArgs,
-  json,
-  LoaderFunctionArgs,
-  redirect,
-} from "@remix-run/node";
-import {
-  Form,
-  useActionData,
-  useLoaderData,
-  useSubmit,
-} from "@remix-run/react";
+import { ActionFunctionArgs, json, LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { Form, useActionData, useLoaderData, useSubmit } from "@remix-run/react";
 
 import { prisma } from "~/db.server";
 import { getUser, requireUserId } from "~/session.server";
@@ -61,41 +51,28 @@ export default function NewCarPool() {
   const submit = useSubmit();
 
   return (
-    <div className="flex flex-col w-screen h-screen bg-baseGreen justify-between">
-      <div className="h-12 w-full flex justify-between">
+    <div className="flex h-screen w-screen flex-col justify-between bg-baseGreen">
+      <div className="flex h-12 w-full justify-between">
         <div></div>
-        <h1 className="text-4xl flex flex-col justify-center place-content-center text-center">
+        <h1 className="flex flex-col place-content-center justify-center text-center text-4xl">
           Sakura
         </h1>
-        <Profile
-          setLoggedInStyle={() => {}}
-          userName={userData?.email as string}
-        ></Profile>
+        <Profile setLoggedInStyle={() => {}} userName={userData?.email as string}></Profile>
       </div>
-      <div className="w-full h-5/6 flex">
-        <div className="w-1/2 h-full flex justify-center place-items-center">
-          <div
-            className="w-1/2 h-1/2 bg-brightOrange rounded-md border border-black flex flex-col place-items-center overflow-y-auto [&::-webkit-scrollbar]:w-2
-  [&::-webkit-scrollbar-track]:rounded-full
-  [&::-webkit-scrollbar-track]:bg-brightOrange
-  [&::-webkit-scrollbar-thumb]:rounded-full
-  [&::-webkit-scrollbar-thumb]:bg-black
-  dark:[&::-webkit-scrollbar-track]:bg-brightOrange
-  dark:[&::-webkit-scrollbar-thumb]:bg-black"
-          >
-            <div className="w-full flex justify-center">
+      <div className="flex h-5/6 w-full">
+        <div className="flex h-full w-1/2 place-items-center justify-center">
+          <div className="flex h-1/2 w-1/2 flex-col place-items-center overflow-y-auto rounded-md border border-black bg-brightOrange [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-black dark:[&::-webkit-scrollbar-thumb]:bg-black [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-brightOrange dark:[&::-webkit-scrollbar-track]:bg-brightOrange [&::-webkit-scrollbar]:w-2">
+            <div className="flex w-full justify-center">
               <h1>Your Cars</h1>
             </div>
             {cars.map((car, index) => (
-              <div
-                key={index}
-              >{`${car.owner}'s ${car.name} - ${car.seats} seats`}</div>
+              <div key={index}>{`${car.owner}'s ${car.name} - ${car.seats} seats`}</div>
             ))}
           </div>
         </div>
-        <div className="w-1/2 h-full flex justify-center place-items-center">
-          <div className="w-1/3 h-1/2 bg-brightOrange rounded-md border border-black">
-            <div className="flex flex-col w-full h-full p-4 gap-2 justify-between">
+        <div className="flex h-full w-1/2 place-items-center justify-center">
+          <div className="h-1/2 w-1/3 rounded-md border border-black bg-brightOrange">
+            <div className="flex h-full w-full flex-col justify-between gap-2 p-4">
               <Form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -104,34 +81,30 @@ export default function NewCarPool() {
                   submit(formData, { method: "POST" });
                 }}
                 method="POST"
-                className="flex flex-col w-full h-full place-items-center justify-around"
+                className="flex h-full w-full flex-col place-items-center justify-around"
               >
                 <input
                   type="text"
                   placeholder="Name your carpool"
                   name="carpoolName"
-                  className="border border-black/30 rounded-md p-2"
+                  className="rounded-md border border-black/30 p-2"
                   required
                 />
-                <hr className="border-black w-full" />
+                <hr className="w-full border-black" />
                 <p>add cars</p>
                 <input
-                  onChange={(e) =>
-                    setCurrentCar({ ...currentCar, owner: e.target.value })
-                  }
+                  onChange={(e) => setCurrentCar({ ...currentCar, owner: e.target.value })}
                   type="text"
                   name="owner"
                   placeholder="car owner"
-                  className="border border-black/30 rounded-md p-2"
+                  className="rounded-md border border-black/30 p-2"
                 ></input>
                 <input
-                  onChange={(e) =>
-                    setCurrentCar({ ...currentCar, name: e.target.value })
-                  }
+                  onChange={(e) => setCurrentCar({ ...currentCar, name: e.target.value })}
                   type="text"
                   name="name"
                   placeholder="car model"
-                  className="border border-black/30 rounded-md p-2"
+                  className="rounded-md border border-black/30 p-2"
                 ></input>
                 <input
                   onChange={(e) =>
@@ -144,7 +117,7 @@ export default function NewCarPool() {
                   name="seats"
                   min="2"
                   placeholder="number of seats"
-                  className="border border-black/30 rounded-md p-2"
+                  className="rounded-md border border-black/30 p-2"
                 ></input>
                 <button
                   type="button"
@@ -152,7 +125,7 @@ export default function NewCarPool() {
                     e.preventDefault();
                     setCars([...cars, currentCar]);
                   }}
-                  className="rounded-md bg-customPurple text-white h-10 w-full"
+                  className="h-10 w-full rounded-md bg-customPurple text-white"
                   disabled={
                     currentCar.name.length <= 0 ||
                     currentCar.owner.length <= 0 ||
@@ -161,9 +134,9 @@ export default function NewCarPool() {
                 >
                   add car
                 </button>
-                <hr className="border-black w-full" />
+                <hr className="w-full border-black" />
                 <button
-                  className="rounded-md bg-customPurple text-white h-10 w-full"
+                  className="h-10 w-full rounded-md bg-customPurple text-white"
                   disabled={cars.length <= 0}
                 >
                   submit
@@ -173,7 +146,7 @@ export default function NewCarPool() {
           </div>
         </div>
       </div>
-      <div className="text-slightGray w-full flex justify-center place-items-center">
+      <div className="flex w-full place-items-center justify-center text-slightGray">
         @Sakura-2024
       </div>
     </div>

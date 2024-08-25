@@ -1,4 +1,4 @@
-import { createServer, Server as HttpServer } from "http";
+import { createServer } from "http";
 import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
@@ -8,7 +8,7 @@ import type { ServerBuild } from "@remix-run/node";
 import { broadcastDevReady, installGlobals } from "@remix-run/node";
 import type { RequestHandler } from "express";
 import express from "express";
-import { Server } from "socket.io";
+import { registerSocketsServer } from "./ws";
 
 installGlobals();
 run();
@@ -62,7 +62,7 @@ async function run() {
 
   const port = process.env.PORT || 3000;
   server.listen(port, () => {
-    console.log(`✅ app ready: http://localhost:${port}`);
+    console.log(`✅ App ready: http://localhost:${port}`);
 
     if (process.env.NODE_ENV === "development") {
       broadcastDevReady(initialBuild);
@@ -114,24 +114,4 @@ async function run() {
       }
     };
   }
-}
-
-function registerSocketsServer(httpServer: HttpServer) {
-  const io = new Server(httpServer);
-
-  // then list to the connection event and get a socket object
-  io.on("connection", (socket) => {
-    // here you can do whatever you want with the socket of the client, in this
-    // example I'm logging the socket.id of the client
-    console.log(socket.id, "connected");
-    // and I emit an event to the client called `event` with a simple message
-    socket.emit("event", "connected!");
-    // and I start listening for the event `something`
-    socket.on("something", (data) => {
-      // log the data together with the socket.id who send it
-      console.log(socket.id, data);
-      // and emeit the event again with the message pong
-      socket.emit("event", "pong");
-    });
-  });
 }
