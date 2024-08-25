@@ -3,7 +3,13 @@ import { Form } from "@remix-run/react";
 import logout from "../images/logout.png";
 import account_circle from "../images/account_circle.png";
 
-export default function Profile({ userName }: { userName: string }) {
+export default function Profile({
+  userName,
+  setLoggedInStyle,
+}: {
+  userName: string;
+  setLoggedInStyle: React.Dispatch<React.SetStateAction<string>>;
+}) {
   const [dropdownToggled, setDropdownToggled] = React.useState(false);
   return (
     <div className="mt-2 flex h-28 w-16 flex-col place-items-center justify-between">
@@ -18,6 +24,7 @@ export default function Profile({ userName }: { userName: string }) {
           <h1 className="flex place-items-center justify-center text-lg">{userName}</h1>
           <Form method="POST" action="/logout" className="w-16">
             <button
+              onClick={() => setLoggedInStyle("justify-between")}
               type="submit"
               className="flex w-full place-items-center justify-between text-lg"
             >

@@ -45,10 +45,7 @@ module.exports = {
         ],
       },
       rules: {
-        "react/jsx-no-leaked-render": [
-          "warn",
-          { validStrategies: ["ternary"] },
-        ],
+        "react/jsx-no-leaked-render": ["warn", { validStrategies: ["ternary"] }],
       },
     },
 
@@ -77,6 +74,7 @@ module.exports = {
       ],
       rules: {
         "@typescript-eslint/no-unused-vars": ["warn"],
+        "@typescript-eslint/no-empty-function": "warn",
       },
     },
 

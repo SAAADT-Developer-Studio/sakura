@@ -57,7 +57,7 @@ export default function NewCarPool() {
         <h1 className="flex flex-col place-content-center justify-center text-center text-4xl">
           Sakura
         </h1>
-        <Profile userName={userData?.email as string}></Profile>
+        <Profile setLoggedInStyle={() => {}} userName={userData?.email as string}></Profile>
       </div>
       <div className="flex h-5/6 w-full">
         <div className="flex h-full w-1/2 place-items-center justify-center">
