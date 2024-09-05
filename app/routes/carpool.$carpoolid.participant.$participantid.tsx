@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { prisma } from "~/db.server";
 
 import { useSocket } from "~/ws/context";
+import { twMerge } from "tailwind-merge";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const carpoolId = params.carpoolid;
@@ -132,12 +133,16 @@ function Car({
       <div className="grid grid-cols-2 gap-1 p-3">
         {Array.from({ length: seats }).map((_, i) => {
           const participant = participants.find((p) => p.seat === i);
+          const isCurrentUser = participant?.participant.id === participantId;
           const isTaken = !!participant;
           return (
             <button
-              className={
-                "rounded p-2 " + (isTaken ? "bg-red-300" : "bg-blue-300 hover:bg-blue-400")
-              }
+              className={twMerge(
+                "rounded p-2",
+                "bg-blue-300 hover:bg-blue-400",
+                isTaken && "bg-red-300 hover:bg-red-400",
+                isCurrentUser && "bg-green-300 hover:bg-green-400",
+              )}
               key={i}
               onClick={() => handleSeatClick(i, isTaken)}
             >
