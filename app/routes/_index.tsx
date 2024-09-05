@@ -19,50 +19,39 @@ export default function Index() {
   }, []);
 
   return (
-    <main className="w-screen h-screen flex">
-      <div className="w-1/2 h-full bg-cover"></div>
-      <div className="w-1/2 h-full bg-baseGreen flex justify-between place-items-center flex-col">
-        <div className={`w-full h-12 flex ${loggedInStyle}`}>
+    <main className="flex h-screen w-screen">
+      <div className="h-full w-1/2 bg-cover"></div>
+      <div className="flex h-full w-1/2 flex-col place-items-center justify-between bg-baseGreen">
+        <div className={`flex h-12 w-full ${loggedInStyle}`}>
           {userData ? (
             <></>
           ) : (
-            <Link
-              to="/register"
-              className="w-32 text-xl flex justify-center place-items-center"
-            >
+            <Link to="/register" className="flex w-32 place-items-center justify-center text-xl">
               Register
             </Link>
           )}
           {userData ? (
-            <Profile
-              userName={userData.email}
-              setLoggedInStyle={setLoggedInStyle}
-            />
+            <Profile userName={userData.email} setLoggedInStyle={setLoggedInStyle} />
           ) : (
-            <Link
-              to="/login"
-              className="w-32 text-xl flex justify-center place-items-center"
-            >
+            <Link to="/login" className="flex w-32 place-items-center justify-center text-xl">
               Login
             </Link>
           )}
         </div>
         <div>
-          <h1 className="text-4xl flex flex-col justify-center place-content-center text-center">
+          <h1 className="flex flex-col place-content-center justify-center text-center text-4xl">
             Sakura
           </h1>
           {userData ? (
             <Link
-              className="w-32 h-10 border border-black bg-brightOrange flex justify-around place-items-center rounded-md"
+              className="flex h-10 w-32 place-items-center justify-around rounded-md border border-black bg-brightOrange"
               to="/carpool/new"
             >
-              <img className="w-6 h-6" src={plusIcon}></img>
+              <img className="h-6 w-6" src={plusIcon}></img>
               New Carpool
             </Link>
           ) : (
-            <p className="text-2xl text-slightGray">
-              Making trips with your friends easy
-            </p>
+            <p className="text-2xl text-slightGray">Making trips with your friends easy</p>
           )}
         </div>
         <div className="text-slightGray">@Sakura-2024</div>
