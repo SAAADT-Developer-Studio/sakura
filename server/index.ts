@@ -49,17 +49,13 @@ async function run() {
   app.disable("x-powered-by");
 
   // Remix fingerprints its assets so we can cache forever.
-  app.use(
-    "/build",
-    express.static("public/build", { immutable: true, maxAge: "1y" }),
-  );
+  app.use("/build", express.static("public/build", { immutable: true, maxAge: "1y" }));
 
   // Everything else (like favicon.ico) is cached for an hour. You may want to be
   // more aggressive with this caching.
   app.use(express.static("public", { maxAge: "1h" }));
 
   app.all("*", remixHandler);
-
   const port = process.env.PORT || 3000;
   server.listen(port, () => {
     console.log(`✅ App ready: http://localhost:${port}`);
@@ -86,9 +82,7 @@ async function run() {
     return import(BUILD_URL + "?t=" + stat.mtimeMs);
   }
 
-  async function createDevRequestHandler(
-    initialBuild: ServerBuild,
-  ): Promise<RequestHandler> {
+  async function createDevRequestHandler(initialBuild: ServerBuild): Promise<RequestHandler> {
     let build = initialBuild;
     async function handleServerUpdate() {
       // 1. re-import the server build
