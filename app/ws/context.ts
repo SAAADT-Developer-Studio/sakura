@@ -18,7 +18,14 @@ export interface ClientToServerEvents {
     },
     callback: (res: { status: "success" } | { status: "error"; message: string }) => void,
   ) => void;
-  something: (msg: string) => void;
+  switchSeat: (
+    data: {
+      from: { carId: string; seat: number };
+      to: { carId: string; seat: number };
+      participantId: string;
+    },
+    callback: (res: { status: "success" } | { status: "error"; message: string }) => void,
+  ) => void;
 }
 export interface ServerToClientEvents {
   connected: (message: string) => void;

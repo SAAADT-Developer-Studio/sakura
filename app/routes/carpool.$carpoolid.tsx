@@ -8,8 +8,7 @@ import { Socket } from "socket.io-client";
 import { wsContext } from "~/ws/context";
 
 export default function CarpoolIdRoot() {
-  const [socket, setSocket] =
-    useState<Socket<DefaultEventsMap, DefaultEventsMap>>();
+  const [socket, setSocket] = useState<Socket<DefaultEventsMap, DefaultEventsMap>>();
   const params = useParams();
   const carpoolId = params.carpoolid;
 
@@ -21,7 +20,6 @@ export default function CarpoolIdRoot() {
       connection.close();
     };
   }, [carpoolId]);
-
   useEffect(() => {
     if (!socket) return;
     socket.on("event", (data) => {

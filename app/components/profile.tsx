@@ -12,7 +12,7 @@ export default function Profile({
 }) {
   const [dropdownToggled, setDropdownToggled] = React.useState(false);
   return (
-    <div className="mt-2 flex h-28 w-16 flex-col place-items-center justify-between">
+    <div className="mr-10 mt-2 flex h-28 w-16 flex-col place-items-center justify-between">
       <img
         className="h-10 w-10 cursor-pointer"
         onClick={() => setDropdownToggled(!dropdownToggled)}

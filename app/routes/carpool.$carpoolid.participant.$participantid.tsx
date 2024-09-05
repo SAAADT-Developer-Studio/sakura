@@ -3,6 +3,7 @@ import { useLoaderData, useRevalidator } from "@remix-run/react";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { prisma } from "~/db.server";
+import { CarWrapper } from "~/components/car";
 
 import { useSocket } from "~/ws/context";
 import { twMerge } from "tailwind-merge";
@@ -37,12 +38,9 @@ export default function CarPool() {
   const participantId = participant.id;
   const currentSeat = participant.CarParticipant[0];
   const socket = useSocket();
-  console.log(carPool);
-  // TODO: implement a store for the carpool state
 
   return (
-    <div>
-      <button onClick={() => socket?.emit("something", "ping")}>Send ping</button>
+    <div className="flex h-full w-full flex-col place-items-center bg-baseGreen">
       <div>
         <h1 className="text-2xl">Carpool: {carPool.name}</h1>
         <h3>Organiser: {carPool.organiser.email} </h3>
@@ -51,7 +49,7 @@ export default function CarPool() {
       <div className="mt-5 flex flex-wrap gap-2">
         {carPool.Cars.map((car, i) => {
           return (
-            <Car
+            <ParticipantCar
               {...car}
               participants={car.CarParticipant}
               participantId={participantId}
@@ -65,7 +63,7 @@ export default function CarPool() {
   );
 }
 
-function Car({
+function ParticipantCar({
   id,
   seats,
   name,
@@ -98,11 +96,9 @@ function Car({
   }, [socket, revalidator]);
 
   const handleSeatClick = (seatNumber: number, isTaken: boolean) => {
-    console.log("seat click", seatNumber, selectedSeatNumber);
     if (isTaken) {
       if (seatNumber === selectedSeatNumber) {
         socket?.emit("deselectSeat", { carId: id, seat: seatNumber, participantId }, (response) => {
-          console.log("deselectSeatResponse", { response });
           if (response.status === "success") {
             toast.success(`Reservation on seat ${seatNumber} in ${name} was removed.`);
           } else {
@@ -113,11 +109,28 @@ function Car({
       }
       return;
     }
+    if (currentSeat !== undefined) {
+      socket?.emit(
+        "switchSeat",
+        {
+          from: currentSeat,
+          to: { carId: id, seat: seatNumber },
+          participantId,
+        },
+        (response) => {
+          if (response.status === "success") {
+            toast.success(`Switched seat from ${selectedSeatNumber} to ${seatNumber}.`);
+          } else {
+            toast.error(response.message);
+          }
+        },
+      );
+      return;
+    }
 
     if (currentSeat) return;
 
     socket?.emit("selectSeat", { carId: id, seat: seatNumber, participantId }, (response) => {
-      console.log("selectSeatResponse", { response });
       if (response.status === "success") {
         toast.success(`Seat ${seatNumber} in ${name} was selected.`);
       } else {
@@ -128,9 +141,8 @@ function Car({
   };
 
   return (
-    <div className="rounded bg-blue-100 shadow">
-      <div className="px-3 pt-1">{name}</div>
-      <div className="grid grid-cols-2 gap-1 p-3">
+    <CarWrapper name={name}>
+      <>
         {Array.from({ length: seats }).map((_, i) => {
           const participant = participants.find((p) => p.seat === i);
           const isCurrentUser = participant?.participant.id === participantId;
@@ -150,7 +162,7 @@ function Car({
             </button>
           );
         })}
-      </div>
-    </div>
+      </>
+    </CarWrapper>
   );
 }

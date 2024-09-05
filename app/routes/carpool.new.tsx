@@ -3,7 +3,7 @@ import { Form, useActionData, useLoaderData, useSubmit } from "@remix-run/react"
 
 import { prisma } from "~/db.server";
 import { getUser, requireUserId } from "~/session.server";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import Profile from "~/components/profile";
 
 interface Car {
