@@ -7,7 +7,7 @@ import { twMerge } from "tailwind-merge";
 import { CarWrapper } from "~/components/car";
 
 import { prisma } from "~/db.server";
-import { getHostname } from "~/utils/getHostname";
+import { getOrigin } from "~/utils/getOrigin";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const carpoolId = params.carpoolid;
@@ -30,7 +30,7 @@ export default function Carpool() {
 
   React.useEffect(() => {
     if (!carPool) return;
-    setLink(`${getHostname()}/carpool/${carPool.id}/join`);
+    setLink(`${getOrigin()}/carpool/${carPool.id}/join`);
   }, [carPool]);
 
   if (!carPool) {
